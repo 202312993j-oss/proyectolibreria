@@ -1,892 +1,180 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <title>Compra tu Coquito - Sistema de Ventas</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; background: #f2f2f2; }
-    #pagina-login {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-    }
-
-    .portada {
-      font-family: 'DM Sans', sans-serif;
-      background: #3e0303de;
-      min-height: 520px;
-      width: 100%;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      padding: 48px 32px;
-    }
-
-    .portada::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 60% 30%, #3d2008 0%, transparent 60%),
-                  radial-gradient(ellipse at 20% 80%, #1a2f12 0%, transparent 50%);
-      opacity: 0.9;
-    }
-
-    .shelf {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 80px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      gap: 4px;
-      padding: 0 40px;
-      opacity: 0.18;
-    }
-
-    .book-spine { border-radius: 2px 2px 0 0; flex-shrink: 0; }
-
-    .content {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-    }
-
-    .icon-wrap {
-      font-size: 52px;
-      margin-bottom: 20px;
-      display: block;
-      filter: drop-shadow(0 4px 16px #67007c);
-    }
-
-    .tag {
-      display: inline-block;
-      background: rgba(10,1,29,0.15);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.2);
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 4px 14px;
-      border-radius: 20px;
-      margin-bottom: 18px;
-    }
-
-    .title {
-      font-family: 'Playfair Display', serif;
-      font-size: 44px;
-      font-weight: 700;
-      color: #f8f8f8;
-      line-height: 1.1;
-      margin-bottom: 10px;
-    }
-
-    .title span { color: #d4a853; }
-
-    .subtitle {
-      font-size: 13px;
-      color: rgba(245,233,232,0.8);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 36px;
-    }
-
-    .divider {
-      width: 48px; height: 1px;
-      background: rgba(212,168,83,0.4);
-      margin: 0 auto 36px;
-    }
-
-    .login-box {
-      background: rgba(245,240,232,0.05);
-      border: 1px solid rgba(245,240,232,0.1);
-      border-radius: 14px;
-      padding: 28px 32px;
-      width: 320px;
-      backdrop-filter: blur(4px);
-    }
-
-    .login-label {
-      font-size: 11px;
-      color: rgba(245,240,232,0.5);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 6px;
-      display: block;
-      text-align: left;
-    }
-
-    .login-input {
-      width: 100%;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(245,240,232,0.15);
-      border-radius: 8px;
-      color: #f5f0e8;
-      font-size: 13px;
-      padding: 9px 13px;
-      margin-bottom: 14px;
-      font-family: 'DM Sans', sans-serif;
-      outline: none;
-      transition: border 0.2s;
-    }
-
-    .login-input::placeholder { color: rgba(245,240,232,0.25); }
-    .login-input:focus { border-color: rgba(212,168,83,0.6); }
-
-    .login-btn {
-      width: 100%;
-      background: #c17f3e;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 10px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      letter-spacing: 0.04em;
-      transition: background 0.2s;
-      margin-top: 4px;
-    }
-
-    .login-btn:hover { background: #a06832; }
-
-    .login-error {
-      color: #ff8a80;
-      font-size: 12px;
-      margin-top: 10px;
-      text-align: center;
-      min-height: 18px;
-    }
-
-    .footer-note {
-      margin-top: 24px;
-      font-size: 11px;
-      color: rgba(245,240,232,0.2);
-      letter-spacing: 0.05em;
-    }
-    #pagina-ventas { display: none; }
-
-    header {
-      background: #2c3e50;
-      color: white;
-      padding: 14px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    header h1 { margin: 0; font-size: 20px; }
-    header span { font-size: 13px; color: #aaa; }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .btn-salir {
-      background: rgba(255,255,255,0.1);
-      color: #ddd;
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 5px 14px;
-      border-radius: 6px;
-      font-size: 12px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .btn-salir:hover { background: rgba(255,255,255,0.2); color: #fff; }
-
-    .contenedor {
-      display: flex;
-      gap: 16px;
-      padding: 20px;
-      max-width: 1100px;
-      margin: auto;
-    }
-
-    /* Panel productos */
-    .panel-productos {
-      flex: 1;
-      background: white;
-      border-radius: 8px;
-      padding: 16px;
-      border: 1px solid #ddd;
-    }
-
-    .panel-productos h2 { margin: 0 0 12px; font-size: 16px; color: #333; }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 8px 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 13px;
-      box-sizing: border-box;
-      margin-bottom: 12px;
-    }
-
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-
-    table th {
-      background: #ecf0f1;
-      padding: 8px 10px;
-      text-align: left;
-      font-weight: 600;
-      color: #555;
-      border-bottom: 1px solid #ddd;
-    }
-
-    table td {
-      padding: 8px 10px;
-      border-bottom: 1px solid #eee;
-      color: #333;
-    }
-
-    table tr:hover td { background: #f9f9f9; }
-
-    .btn-agregar {
-      background: #27ae60;
-      color: white;
-      border: none;
-      padding: 5px 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .btn-agregar:hover { background: #219150; }
-    .btn-agregar:disabled { background: #ccc; cursor: not-allowed; }
-
-    .sin-stock { color: #e74c3c; font-size: 11px; }
-
-    /* Panel venta */
-    .panel-venta {
-      width: 300px;
-      background: white;
-      border-radius: 8px;
-      padding: 16px;
-      border: 1px solid #ddd;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .panel-venta h2 { margin: 0; font-size: 16px; color: #333; }
-
-    .campo label { display: block; font-size: 12px; color: #777; margin-bottom: 4px; }
-
-    .campo input {
-      width: 100%;
-      padding: 7px 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 13px;
-      box-sizing: border-box;
-    }
-
-    .lista-venta {
-      min-height: 120px;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      padding: 8px;
-      font-size: 13px;
-    }
-
-    .lista-venta .vacio {
-      color: #aaa;
-      text-align: center;
-      padding: 20px 0;
-      font-size: 12px;
-    }
-
-    .item-venta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 5px 0;
-      border-bottom: 1px solid #f0f0f0;
-    }
-
-    .item-venta:last-child { border-bottom: none; }
-    .item-nombre { flex: 1; font-size: 12px; }
-
-    .item-qty { display: flex; align-items: center; gap: 4px; }
-
-    .item-qty button {
-      width: 20px; height: 20px;
-      border: 1px solid #ccc;
-      background: #f5f5f5;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 13px;
-      line-height: 1;
-    }
-
-    .item-precio { font-size: 12px; font-weight: 600; min-width: 55px; text-align: right; }
-
-    .item-del {
-      background: none; border: none;
-      color: #ccc; cursor: pointer; font-size: 13px; margin-left: 4px;
-    }
-
-    .item-del:hover { color: #e74c3c; }
-
-    .totales { border-top: 1px solid #eee; padding-top: 10px; font-size: 13px; }
-
-    .totales .fila {
-      display: flex; justify-content: space-between;
-      color: #777; margin-bottom: 4px;
-    }
-
-    .totales .total-final {
-      display: flex; justify-content: space-between;
-      font-size: 15px; font-weight: 700; color: #222; margin-top: 6px;
-    }
-
-    .pago-info {
-      background: #eafaf1;
-      border: 1px solid #27ae60;
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #1e8449;
-    }
-
-    .btn-registrar {
-      background: #2c3e50; color: white; border: none;
-      padding: 10px; border-radius: 7px; font-size: 14px;
-      font-weight: 600; cursor: pointer; width: 100%;
-    }
-
-    .btn-registrar:hover { background: #1a252f; }
-    .btn-registrar:disabled { background: #aaa; cursor: not-allowed; }
-
-    .btn-limpiar {
-      background: #f5f5f5; color: #777;
-      border: 1px solid #ddd; padding: 7px;
-      border-radius: 7px; font-size: 12px; cursor: pointer; width: 100%;
-    }
-
-    /* Historial */
-    .historial { max-width: 1100px; margin: 0 auto 24px; padding: 0 20px; }
-    .historial h2 { font-size: 15px; color: #333; margin-bottom: 10px; }
-
-    .historial table {
-      background: white;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      overflow: hidden;
-    }
-
-    /* TODO banner */
-    .todo {
-      background: #fff8e1;
-      border-left: 3px solid #f39c12;
-      padding: 8px 14px;
-      font-size: 12px;
-      color: #7d5a00;
-      margin-bottom: 10px;
-      border-radius: 0 4px 4px 0;
-    }
-
-    .aviso { color: #aaa; font-size: 12px; text-align: center; padding: 12px; }
-
-    /* Modal Overlay Básico */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease;
-    }
-    .modal-overlay.active {
-      opacity: 1;
-      pointer-events: all;
-    }
-    
-    /* Modal Card Básico */
-    .modal-card {
-      background: #ffffff;
-      color: #333333;
-      border-radius: 8px;
-      width: 90%;
-      max-width: 320px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      font-family: Arial, sans-serif;
-    }
-    
-    .modal-card h3 {
-      margin-top: 0;
-      color: #2c3e50;
-      font-size: 18px;
-      margin-bottom: 8px;
-    }
-    
-    .modal-desc {
-      font-size: 13px;
-      color: #666666;
-      line-height: 1.4;
-      margin-bottom: 14px;
-    }
-    
-    /* Credential Fields */
-    .credential-fields {
-      background: #f8f9fa;
-      border: 1px solid #e9ecef;
-      border-radius: 6px;
-      padding: 10px 14px;
-      margin-bottom: 16px;
-      text-align: left;
-    }
-    
-    .credential-field {
-      margin-bottom: 6px;
-      font-size: 13px;
-    }
-    .credential-field:last-child {
-      margin-bottom: 0;
-    }
-    
-    .field-value {
-      font-family: monospace;
-      background: #e9ecef;
-      padding: 2px 6px;
-      border-radius: 4px;
-      color: #333333;
-      font-weight: bold;
-    }
-    
-    /* Actions */
-    .modal-actions {
-      display: flex;
-      gap: 8px;
-    }
-    
-    .btn-action {
-      flex: 1;
-      padding: 9px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: bold;
-      cursor: pointer;
-      border: none;
-      transition: background 0.2s;
-    }
-    
-    .btn-fill {
-      background: #27ae60;
-      color: white;
-    }
-    
-    .btn-fill:hover {
-      background: #219150;
-    }
-    
-    .btn-secondary {
-      background: #e0e0e0;
-      color: #333;
-    }
-    
-    .btn-secondary:hover {
-      background: #d5d5d5;
-    }
-
-    .ver-credenciales-link {
-      color: #d4a853;
-      text-decoration: underline;
-      font-size: 12px;
-      cursor: pointer;
-    }
-    .ver-credenciales-link:hover {
-      color: #fff;
-    }
-
-  </style>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<!-- Modal Básico de Credenciales -->
-<div id="credential-modal" class="modal-overlay">
-  <div class="modal-card">
-    <h3>Acceso Demo</h3>
-    <p class="modal-desc">Usa las siguientes credenciales para ingresar al sistema:</p>
-    
-    <div class="credential-fields">
-      <div class="credential-field">
-        <strong>Usuario:</strong> <span class="field-value">administrador</span>
+  <!-- Modal Básico de Credenciales -->
+  <div id="credential-modal" class="modal-overlay">
+    <div class="modal-card">
+      <h3>Acceso Demo</h3>
+      <p class="modal-desc">Usa las siguientes credenciales para ingresar al sistema:</p>
+      
+      <div class="credential-fields">
+        <div class="credential-field">
+          <strong>Usuario:</strong> <span class="field-value">administrador</span>
+        </div>
+        <div class="credential-field">
+          <strong>Contraseña:</strong> <span class="field-value">usuario123</span>
+        </div>
       </div>
-      <div class="credential-field">
-        <strong>Contraseña:</strong> <span class="field-value">usuario123</span>
+      
+      <div class="modal-actions">
+        <button class="btn-action btn-fill" onclick="autocompletarYEntrar()">
+          Autocompletar
+        </button>
+        <button class="btn-action btn-secondary" onclick="cerrarModal()">
+          Cerrar
+        </button>
       </div>
-    </div>
-    
-    <div class="modal-actions">
-      <button class="btn-action btn-fill" onclick="autocompletarYEntrar()">
-        Autocompletar
-      </button>
-      <button class="btn-action btn-secondary" onclick="cerrarModal()">
-        Cerrar
-      </button>
     </div>
   </div>
-</div>
 
-<div id="pagina-login">
-  <div class="portada">
-    <div class="shelf">
-      <div class="book-spine" style="width:18px;height:60px;background:#c17f3e"></div>
-      <div class="book-spine" style="width:14px;height:72px;background:#7a8c6e"></div>
-      <div class="book-spine" style="width:20px;height:55px;background:#c4896f"></div>
-      <div class="book-spine" style="width:12px;height:68px;background:#d4a853"></div>
-      <div class="book-spine" style="width:16px;height:50px;background:#7a8c6e"></div>
-      <div class="book-spine" style="width:22px;height:75px;background:#c17f3e"></div>
-      <div class="book-spine" style="width:10px;height:62px;background:#c4896f"></div>
-      <div class="book-spine" style="width:18px;height:58px;background:#d4a853"></div>
-      <div class="book-spine" style="width:14px;height:70px;background:#7a8c6e"></div>
-      <div class="book-spine" style="width:20px;height:65px;background:#c17f3e"></div>
-      <div class="book-spine" style="width:16px;height:52px;background:#c4896f"></div>
-      <div class="book-spine" style="width:12px;height:78px;background:#d4a853"></div>
-      <div class="book-spine" style="width:18px;height:60px;background:#7a8c6e"></div>
-    </div>
-
-    <div class="content">
-      <span class="icon-wrap">📚</span>
-      <div class="tag">Sistema de ventas</div>
-      <div class="title">Compra<span>tu</span>Coquito</div>
-      <div class="subtitle">Librería &amp; punto de venta de artículos de oficina</div>
-      <div class="divider"></div>
-
-      <div class="login-box">
-        <label class="login-label">Usuario</label>
-        <input class="login-input" type="text" id="input-usuario" placeholder="nombre de usuario" />
-        <label class="login-label">Contraseña</label>
-        <input class="login-input" type="password" id="input-password" placeholder="••••••••"
-          onkeydown="if(event.key==='Enter') iniciarSesion()" />
-        <button class="login-btn" onclick="iniciarSesion()">Ingresar al sistema</button>
-        <div class="login-error" id="login-error"></div>
+  <div id="pagina-login">
+    <div class="portada">
+      <div class="shelf">
+        <div class="book-spine" style="width:18px;height:60px;background:#c17f3e"></div>
+        <div class="book-spine" style="width:14px;height:72px;background:#7a8c6e"></div>
+        <div class="book-spine" style="width:20px;height:55px;background:#c4896f"></div>
+        <div class="book-spine" style="width:12px;height:68px;background:#d4a853"></div>
+        <div class="book-spine" style="width:16px;height:50px;background:#7a8c6e"></div>
+        <div class="book-spine" style="width:22px;height:75px;background:#c17f3e"></div>
+        <div class="book-spine" style="width:10px;height:62px;background:#c4896f"></div>
+        <div class="book-spine" style="width:18px;height:58px;background:#d4a853"></div>
+        <div class="book-spine" style="width:14px;height:70px;background:#7a8c6e"></div>
+        <div class="book-spine" style="width:20px;height:65px;background:#c17f3e"></div>
+        <div class="book-spine" style="width:16px;height:52px;background:#c4896f"></div>
+        <div class="book-spine" style="width:12px;height:78px;background:#d4a853"></div>
+        <div class="book-spine" style="width:18px;height:60px;background:#7a8c6e"></div>
       </div>
 
-      <div style="margin-top: 15px;">
-        <a href="#" onclick="abrirModal(); return false;" class="ver-credenciales-link">
-          🔑 Ver credenciales de acceso
-        </a>
-      </div>
+      <div class="content">
+        <span class="icon-wrap">📚</span>
+        <div class="tag">Sistema de ventas</div>
+        <div class="title">Compra<span>tu</span>Coquito</div>
+        <div class="subtitle">Librería &amp; punto de venta de artículos de oficina</div>
+        <div class="divider"></div>
 
-      <div class="footer-note">Librería Compra tu Coquito &nbsp;·&nbsp; v1.0</div>
+        <div class="login-box">
+          <label class="login-label">Usuario</label>
+          <input class="login-input" type="text" id="input-usuario" placeholder="nombre de usuario" />
+          <label class="login-label">Contraseña</label>
+          <input class="login-input" type="password" id="input-password" placeholder="••••••••"
+            onkeydown="if(event.key==='Enter') iniciarSesion()" />
+          <button class="login-btn" onclick="iniciarSesion()">Ingresar al sistema</button>
+          <div class="login-error" id="login-error"></div>
+        </div>
+
+        <div style="margin-top: 15px;">
+          <a href="#" onclick="abrirModal(); return false;" class="ver-credenciales-link">
+            🔑 Ver credenciales de acceso
+          </a>
+        </div>
+
+        <div class="footer-note">Librería Compra tu Coquito &nbsp;·&nbsp; v1.0</div>
+      </div>
     </div>
   </div>
-</div>
-<div id="pagina-ventas">
+  <div id="pagina-ventas">
 
-  <header>
-    <h1>📚 Compra tu Coquito — Registro de Ventas</h1>
-    <div class="header-right">
-      <span id="fecha-hoy"></span>
-      <button class="btn-salir" onclick="cerrarSesion()">⬅ Cerrar sesión</button>
+    <header>
+      <h1>📚 Compra tu Coquito — Registro de Ventas</h1>
+      <div class="header-right">
+        <span id="fecha-hoy"></span>
+        <button class="btn-salir" onclick="cerrarSesion()">⬅ Cerrar sesión</button>
+      </div>
+    </header>
+
+    <div class="contenedor">
+
+      <!-- PRODUCTOS -->
+      <div class="panel-productos">
+        <h2>Productos</h2>
+
+        <!-- TODO: agregar filtro por categoria -->
+        <div class="todo">⚠ Pendiente: agregar filtro por categoría</div>
+
+        <input type="text" placeholder="Buscar producto..." oninput="buscar(this.value)" />
+
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Categoría</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tabla-productos"></tbody>
+        </table>
+      </div>
+
+      <!-- VENTA ACTUAL -->
+      <div class="panel-venta">
+        <h2>🛒 Venta actual</h2>
+
+        <div class="campo">
+          <label>Cliente</label>
+          <input type="text" id="cliente" placeholder="Nombre del cliente..." />
+        </div>
+
+        <div>
+          <label style="font-size:12px;color:#777;display:block;margin-bottom:6px">Productos agregados</label>
+          <div class="lista-venta" id="lista-venta">
+            <div class="vacio">Ningún producto agregado aún</div>
+          </div>
+        </div>
+
+        <div class="totales" id="totales" style="display:none">
+          <div class="fila"><span>Subtotal</span><span id="subtotal">S/. 0.00</span></div>
+          <!-- TODO: calcular IGV correctamente -->
+          <div class="fila"><span>IGV (18%)</span><span id="igv">S/. 0.00</span></div>
+          <div class="total-final"><span>Total</span><span id="total">S/. 0.00</span></div>
+        </div>
+
+        <div class="pago-info">💵 Pago en efectivo</div>
+
+        <button class="btn-registrar" id="btn-registrar" onclick="registrar()" disabled>
+          Registrar venta
+        </button>
+        <button class="btn-limpiar" onclick="limpiar()">Cancelar / limpiar</button>
+      </div>
+
     </div>
-  </header>
 
-  <div class="contenedor">
-
-    <!-- PRODUCTOS -->
-    <div class="panel-productos">
-      <h2>Productos</h2>
-
-      <!-- TODO: agregar filtro por categoria -->
-      <div class="todo">⚠ Pendiente: agregar filtro por categoría</div>
-
-      <input type="text" placeholder="Buscar producto..." oninput="buscar(this.value)" />
-
+    <!-- HISTORIAL -->
+    <div class="historial">
+      <h2>Últimas ventas</h2>
+      <!-- TODO: paginación pendiente -->
       <table>
         <thead>
           <tr>
-            <th>Nombre</th>
-            <th>Categoría</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th></th>
+            <th>#</th>
+            <th>Hora</th>
+            <th>Cliente</th>
+            <th>Items</th>
+            <th>Total</th>
           </tr>
         </thead>
-        <tbody id="tabla-productos"></tbody>
+        <tbody id="tabla-historial">
+          <tr>
+            <td colspan="5" class="aviso">Aún no hay ventas registradas</td>
+          </tr>
+        </tbody>
       </table>
     </div>
 
-    <!-- VENTA ACTUAL -->
-    <div class="panel-venta">
-      <h2>🛒 Venta actual</h2>
+  </div><!-- /pagina-ventas -->
 
-      <div class="campo">
-        <label>Cliente</label>
-        <input type="text" id="cliente" placeholder="Nombre del cliente..." />
-      </div>
-
-      <div>
-        <label style="font-size:12px;color:#777;display:block;margin-bottom:6px">Productos agregados</label>
-        <div class="lista-venta" id="lista-venta">
-          <div class="vacio">Ningún producto agregado aún</div>
-        </div>
-      </div>
-
-      <div class="totales" id="totales" style="display:none">
-        <div class="fila"><span>Subtotal</span><span id="subtotal">S/. 0.00</span></div>
-        <!-- TODO: calcular IGV correctamente -->
-        <div class="fila"><span>IGV (18%)</span><span id="igv">S/. 0.00</span></div>
-        <div class="total-final"><span>Total</span><span id="total">S/. 0.00</span></div>
-      </div>
-
-      <div class="pago-info">💵 Pago en efectivo</div>
-
-      <button class="btn-registrar" id="btn-registrar" onclick="registrar()" disabled>
-        Registrar venta
-      </button>
-      <button class="btn-limpiar" onclick="limpiar()">Cancelar / limpiar</button>
-    </div>
-
-  </div>
-
-  <!-- HISTORIAL -->
-  <div class="historial">
-    <h2>Últimas ventas</h2>
-    <!-- TODO: paginación pendiente -->
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Hora</th>
-          <th>Cliente</th>
-          <th>Items</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody id="tabla-historial">
-        <tr>
-          <td colspan="5" class="aviso">Aún no hay ventas registradas</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-</div><!-- /pagina-ventas -->
-
-<script>
-  const USUARIO = "administrador";
-  const PASSWORD = "usuario123";
-
-  // Funciones para el Modal de Credenciales (Básico)
-  function abrirModal() {
-    const modal = document.getElementById("credential-modal");
-    if (modal) modal.classList.add("active");
-  }
-
-  function cerrarModal() {
-    const modal = document.getElementById("credential-modal");
-    if (modal) modal.classList.remove("active");
-  }
-
-  function autocompletarYEntrar() {
-    const uInput = document.getElementById("input-usuario");
-    const pInput = document.getElementById("input-password");
-    if (uInput && pInput) {
-      uInput.value = USUARIO;
-      pInput.value = PASSWORD;
-    }
-    cerrarModal();
-    setTimeout(iniciarSesion, 200);
-  }
-
-  // Mostrar modal al cargar la página
-  window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(abrirModal, 500);
-  });
-
-  function iniciarSesion() {
-    const usuario = document.getElementById("input-usuario").value.trim();
-    const password = document.getElementById("input-password").value;
-    const error = document.getElementById("login-error");
-
-    if (usuario === USUARIO && password === PASSWORD) {
-      error.textContent = "";
-      document.getElementById("pagina-login").style.display = "none";
-      document.getElementById("pagina-ventas").style.display = "block";
-      iniciarSistema();
-    } else {
-      error.textContent = "Usuario o contraseña incorrectos.";
-      document.getElementById("input-password").value = "";
-    }
-  }
-
-  function cerrarSesion() {
-    document.getElementById("pagina-ventas").style.display = "none";
-    document.getElementById("pagina-login").style.display = "flex";
-    document.getElementById("input-usuario").value = "";
-    document.getElementById("input-password").value = "";
-    document.getElementById("login-error").textContent = "";
-  }
-  const productos = [
-    { id: 1, nombre: "Cuaderno A4 espiral",   cat: "Papelería", precio: 8.50,  stock: 30 },
-    { id: 2, nombre: "Lapicero azul Pilot",   cat: "Papelería", precio: 3.00,  stock: 50 },
-    { id: 3, nombre: "El Principito",          cat: "Libros",    precio: 28.00, stock: 10 },
-    { id: 4, nombre: "Tijera escolar",         cat: "Útiles",    precio: 5.50,  stock: 0  },
-    { id: 5, nombre: "Resaltador x3 colores", cat: "Papelería", precio: 7.00,  stock: 20 },
-    { id: 6, nombre: "Regla 30cm",             cat: "Útiles",    precio: 3.00,  stock: 15 },
-    { id: 7, nombre: "1984 - George Orwell",   cat: "Libros",    precio: 35.00, stock: 5  },
-    { id: 8, nombre: "Lápices 2B x12",         cat: "Papelería", precio: 6.00,  stock: 25 },
-  ];
-
-  let carrito = [];
-  let numVenta = 1;
-  let textoBusqueda = "";
-
-  function iniciarSistema() {
-    document.getElementById("fecha-hoy").textContent = new Date().toLocaleDateString("es-PE", {
-      weekday: "long", year: "numeric", month: "long", day: "numeric"
-    });
-    renderTabla();
-  }
-
-  function renderTabla() {
-    const lista = productos.filter(p =>
-      p.nombre.toLowerCase().includes(textoBusqueda.toLowerCase())
-    );
-    const tbody = document.getElementById("tabla-productos");
-    tbody.innerHTML = "";
-    lista.forEach(p => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${p.nombre}</td>
-        <td>${p.cat}</td>
-        <td>S/. ${p.precio.toFixed(2)}</td>
-        <td>${p.stock > 0 ? p.stock + " ud." : '<span class="sin-stock">Sin stock</span>'}</td>
-        <td>
-          <button class="btn-agregar" onclick="agregar(${p.id})" ${p.stock === 0 ? "disabled" : ""}>
-            + Agregar
-          </button>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
-  }
-
-  function buscar(v) { textoBusqueda = v; renderTabla(); }
-
-  function agregar(id) {
-    const prod = productos.find(p => p.id === id);
-    const enCarrito = carrito.find(c => c.id === id);
-    if (enCarrito) {
-      if (enCarrito.qty >= prod.stock) { alert("Stock máximo alcanzado"); return; }
-      enCarrito.qty++;
-    } else {
-      carrito.push({ ...prod, qty: 1 });
-    }
-    renderCarrito();
-  }
-
-  function cambiarQty(id, delta) {
-    const item = carrito.find(c => c.id === id);
-    if (!item) return;
-    item.qty += delta;
-    if (item.qty <= 0) carrito = carrito.filter(c => c.id !== id);
-    renderCarrito();
-  }
-
-  function eliminar(id) {
-    carrito = carrito.filter(c => c.id !== id);
-    renderCarrito();
-  }
-
-  function renderCarrito() {
-    const lista = document.getElementById("lista-venta");
-    const totalesDiv = document.getElementById("totales");
-    const btnReg = document.getElementById("btn-registrar");
-
-    if (carrito.length === 0) {
-      lista.innerHTML = '<div class="vacio">Ningún producto agregado aún</div>';
-      totalesDiv.style.display = "none";
-      btnReg.disabled = true;
-      return;
-    }
-
-    lista.innerHTML = carrito.map(item => `
-      <div class="item-venta">
-        <span class="item-nombre">${item.nombre}</span>
-        <div class="item-qty">
-          <button onclick="cambiarQty(${item.id}, -1)">−</button>
-          <span>${item.qty}</span>
-          <button onclick="cambiarQty(${item.id}, 1)">+</button>
-        </div>
-        <span class="item-precio">S/. ${(item.precio * item.qty).toFixed(2)}</span>
-        <button class="item-del" onclick="eliminar(${item.id})">✕</button>
-      </div>
-    `).join("");
-
-    const subtotal = carrito.reduce((a, b) => a + b.precio * b.qty, 0);
-    const igv = subtotal * 0.18;
-    const total = subtotal + igv;
-
-    document.getElementById("subtotal").textContent = "S/. " + subtotal.toFixed(2);
-    document.getElementById("igv").textContent      = "S/. " + igv.toFixed(2);
-    document.getElementById("total").textContent    = "S/. " + total.toFixed(2);
-
-    totalesDiv.style.display = "";
-    btnReg.disabled = false;
-  }
-
-  function registrar() {
-    const cliente = document.getElementById("cliente").value.trim() || "Sin nombre";
-    const subtotal = carrito.reduce((a, b) => a + b.precio * b.qty, 0);
-    const total = subtotal * 1.18;
-    const hora = new Date().toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" });
-    const items = carrito.reduce((a, b) => a + b.qty, 0);
-
-    // Descontar stock
-    carrito.forEach(c => {
-      const p = productos.find(x => x.id === c.id);
-      if (p) p.stock -= c.qty;
-    });
-
-    const tbody = document.getElementById("tabla-historial");
-    if (numVenta === 1) tbody.innerHTML = "";
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>#${String(numVenta).padStart(3, "0")}</td>
-      <td>${hora}</td>
-      <td>${cliente}</td>
-      <td>${items} item(s)</td>
-      <td><strong>S/. ${total.toFixed(2)}</strong></td>
-    `;
-    tbody.insertBefore(tr, tbody.firstChild);
-
-    numVenta++;
-    limpiar();
-    renderTabla();
-    alert("✅ Venta registrada correctamente");
-  }
-
-  function limpiar() {
-    carrito = [];
-    document.getElementById("cliente").value = "";
-    renderCarrito();
-  }
-
-</script>
+  <script src="script.js"></script>
 </body>
+
 </html>
