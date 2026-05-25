@@ -23,10 +23,78 @@ function autocompletarYEntrar() {
   setTimeout(iniciarSesion, 200);
 }
 
-// Mostrar modal al cargar la página
+// Mostrar modal y elementos interactivos de la portada al cargar la página
 window.addEventListener('DOMContentLoaded', () => {
+  inicializarElementosPortada();
   setTimeout(abrirModal, 500);
 });
+
+function inicializarElementosPortada() {
+  const portada = document.querySelector(".portada");
+  const loginBox = document.querySelector(".login-box");
+  if (!portada || !loginBox) return;
+
+  // 1. Crear el botón de WhatsApp flotante
+  const waBtn = document.createElement("a");
+  waBtn.className = "btn-whatsapp";
+  waBtn.href = "https://wa.me/51999999999?text=Hola,%20quisiera%20saber%20más%20información%20sobre%20los%20libros%20y%20artículos%20de%20oficina.";
+  waBtn.target = "_blank";
+  waBtn.title = "Contáctanos por WhatsApp";
+  
+  // Icono SVG oficial de WhatsApp limpio y escalable
+  waBtn.innerHTML = `
+    <svg viewBox="0 0 24 24">
+      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.182 1.449 4.825 1.451 5.436.002 9.858-4.415 9.86-9.858.002-2.638-1.016-5.118-2.868-6.972C16.513 1.92 14.041.902 11.39.902c-5.447 0-9.873 4.42-9.875 9.863-.001 1.724.455 3.411 1.32 4.908l-.995 3.633 3.717-.975zm11.367-5.265c-.29-.145-1.713-.846-1.977-.942-.264-.096-.456-.145-.647.145-.19.29-.74.942-.907 1.134-.166.19-.333.214-.623.069-.29-.145-1.226-.452-2.335-1.441-.864-.771-1.448-1.723-1.618-2.014-.17-.29-.018-.447.127-.592.13-.13.29-.338.435-.507.145-.17.193-.29.29-.483.097-.19.048-.362-.024-.507-.072-.145-.647-1.56-.887-2.14-.233-.56-.47-.482-.647-.491-.167-.008-.36-.01-.553-.01-.193 0-.507.072-.773.362-.266.29-1.013.99-1.013 2.414 0 1.424 1.037 2.8 1.182 2.993.145.19 2.04 3.115 4.939 4.363.69.297 1.229.475 1.65.609.694.22 1.324.19 1.825.115.56-.085 1.714-.7 1.953-1.374.24-.674.24-1.253.167-1.374-.072-.121-.264-.19-.554-.335z"/>
+    </svg>
+  `;
+  
+  portada.appendChild(waBtn);
+
+  // 2. Crear la cuadrícula responsiva (Grid de Portada)
+  const grid = document.createElement("div");
+  grid.className = "portada-grid";
+
+  // Insertar la cuadrícula justo antes del login-box en el DOM
+  loginBox.parentNode.insertBefore(grid, loginBox);
+
+  // 3. Crear la tarjeta de la Imagen Interactiva
+  const card = document.createElement("div");
+  card.className = "interactive-card";
+
+  card.innerHTML = `
+    <span class="interactive-badge">📖 Bienvenidos</span>
+    <img src="libreria_cover.png" alt="Librería Compra tu Coquito" />
+  `;
+
+  // Mover la tarjeta de imagen interactiva y el login-box dentro del Grid
+  grid.appendChild(card);
+  grid.appendChild(loginBox);
+
+  // 4. Efecto de inclinación 3D (Tilt effect) con Javascript sencillo
+  const imgElement = card.querySelector("img");
+
+  card.addEventListener("mousemove", (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left; // Posición X
+    const y = e.clientY - rect.top;  // Posición Y
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    // Inclinación máxima de 12 grados
+    const rotateX = ((centerY - y) / centerY) * 12;
+    const rotateY = ((x - centerX) / centerX) * 12;
+    
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    imgElement.style.transform = `scale(1.04)`;
+  });
+
+  card.addEventListener("mouseleave", () => {
+    card.style.transform = "rotateX(0deg) rotateY(0deg)";
+    imgElement.style.transform = "scale(1)";
+  });
+}
+
 
 function iniciarSesion() {
   const usuario = document.getElementById("input-usuario").value.trim();

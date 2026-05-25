@@ -512,3 +512,122 @@ table tr:hover td { background: #f9f9f9; }
 .ver-credenciales-link:hover {
   color: #fff;
 }
+
+/* ==========================================
+   Nuevos Elementos Interactivos en Portada
+   ========================================== */
+
+/* Botón de WhatsApp Flotante */
+.btn-whatsapp {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  width: 60px;
+  height: 60px;
+  background-color: #25d366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 1000;
+  text-decoration: none;
+  animation: wa-pulse 2s infinite;
+}
+
+.btn-whatsapp:hover {
+  transform: scale(1.1) rotate(8deg);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+  background-color: #20ba5a;
+}
+
+.btn-whatsapp svg {
+  width: 32px;
+  height: 32px;
+  fill: currentColor;
+}
+
+@keyframes wa-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}
+
+/* Grid de Portada Responsivo */
+.portada-grid {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 850px;
+  perspective: 1000px;
+}
+
+@media (max-width: 768px) {
+  .portada-grid {
+    flex-direction: column;
+    gap: 24px;
+    padding: 0 10px;
+  }
+}
+
+/* Tarjeta de la Imagen Interactiva (con perspectiva 3D) */
+.interactive-card {
+  position: relative;
+  width: 320px;
+  height: 340px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(245, 240, 232, 0.03);
+  backdrop-filter: blur(4px);
+  transform-style: preserve-3d;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.interactive-card:hover {
+  box-shadow: 0 20px 45px rgba(212, 168, 83, 0.25);
+  border-color: rgba(212, 168, 83, 0.3);
+}
+
+.interactive-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.1s ease-out;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+/* Detalle decorativo flotante sobre la imagen en 3D */
+.interactive-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: rgba(193, 127, 62, 0.9);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transform: translateZ(20px);
+  pointer-events: none;
+}
+
