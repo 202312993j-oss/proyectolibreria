@@ -63,7 +63,7 @@ function inicializarElementosPortada() {
 
   card.innerHTML = `
     <span class="interactive-badge">📖 Bienvenidos</span>
-    <img src="libreria_cover.png" alt="Librería Compra tu Coquito" />
+    <img src="imagenlibro.png" alt="Librería Compra tu Coquito" />
   `;
 
   // Mover la tarjeta de imagen interactiva y el login-box dentro del Grid
