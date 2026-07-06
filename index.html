@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Compra tu Coquito - Sistema de Ventas</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Modal Básico de Credenciales -->
+  <div id="credential-modal" class="modal-overlay">
+    <div class="modal-card">
+      <h3>Acceso Demo</h3>
+      <p class="modal-desc">Usa las siguientes credenciales para ingresar al sistema:</p>
+      
+      <div class="credential-fields">
+        <div class="credential-field">
+          <strong>Usuario:</strong> <span class="field-value">administrador</span>
+        </div>
+        <div class="credential-field">
+          <strong>Contraseña:</strong> <span class="field-value">usuario123</span>
+        </div>
+      </div>
+      
+      <div class="modal-actions">
+        <button class="btn-action btn-fill" onclick="autocompletarYEntrar()">
+          Autocompletar
+        </button>
+        <button class="btn-action btn-secondary" onclick="cerrarModal()">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="pagina-login">
+    <div class="portada">
+      <div class="shelf">
+        <div class="book-spine" style="width:18px;height:60px;background:#c17f3e"></div>
+        <div class="book-spine" style="width:14px;height:72px;background:#7a8c6e"></div>
+        <div class="book-spine" style="width:20px;height:55px;background:#c4896f"></div>
+        <div class="book-spine" style="width:12px;height:68px;background:#d4a853"></div>
+        <div class="book-spine" style="width:16px;height:50px;background:#7a8c6e"></div>
+        <div class="book-spine" style="width:22px;height:75px;background:#c17f3e"></div>
+        <div class="book-spine" style="width:10px;height:62px;background:#c4896f"></div>
+        <div class="book-spine" style="width:18px;height:58px;background:#d4a853"></div>
+        <div class="book-spine" style="width:14px;height:70px;background:#7a8c6e"></div>
+        <div class="book-spine" style="width:20px;height:65px;background:#c17f3e"></div>
+        <div class="book-spine" style="width:16px;height:52px;background:#c4896f"></div>
+        <div class="book-spine" style="width:12px;height:78px;background:#d4a853"></div>
+        <div class="book-spine" style="width:18px;height:60px;background:#7a8c6e"></div>
+      </div>
+
+      <div class="content">
+        <span class="icon-wrap">📚</span>
+        <div class="tag">Sistema de ventas</div>
+        <div class="title">Compra<span>tu</span>Coquito</div>
+        <div class="subtitle">Librería &amp; punto de venta de artículos de oficina</div>
+        <div class="divider"></div>
+
+        <div class="login-box">
+          <label class="login-label">Usuario</label>
+          <input class="login-input" type="text" id="input-usuario" placeholder="nombre de usuario" />
+          <label class="login-label">Contraseña</label>
+          <input class="login-input" type="password" id="input-password" placeholder="••••••••"
+            onkeydown="if(event.key==='Enter') iniciarSesion()" />
+          <button class="login-btn" onclick="iniciarSesion()">Ingresar al sistema</button>
+          <div class="login-error" id="login-error"></div>
+        </div>
+
+        <div style="margin-top: 15px;">
+          <a href="#" onclick="abrirModal(); return false;" class="ver-credenciales-link">
+            🔑 Ver credenciales de acceso
+          </a>
+        </div>
+
+        <div class="footer-note">Librería Compra tu Coquito &nbsp;·&nbsp; v1.0</div>
+      </div>
+    </div>
+  </div>
+  <div id="pagina-ventas">
+
+    <header>
+      <h1>📚 Compra tu Coquito — Registro de Ventas</h1>
+      <div class="header-right">
+        <span id="fecha-hoy"></span>
+        <button class="btn-salir" onclick="cerrarSesion()">⬅ Cerrar sesión</button>
+      </div>
+    </header>
+
+    <div class="contenedor">
+
+      <!-- PRODUCTOS -->
+      <div class="panel-productos">
+        <h2>Productos</h2>
+
+        <!-- TODO: agregar filtro por categoria -->
+        <div class="todo">⚠ Pendiente: agregar filtro por categoría</div>
+
+        <input type="text" placeholder="Buscar producto..." oninput="buscar(this.value)" />
+
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Categoría</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tabla-productos"></tbody>
+        </table>
+      </div>
+
+      <!-- VENTA ACTUAL -->
+      <div class="panel-venta">
+        <h2>🛒 Venta actual</h2>
+
+        <div class="campo">
+          <label>Cliente</label>
+          <input type="text" id="cliente" placeholder="Nombre del cliente..." />
+        </div>
+
+        <div>
+          <label style="font-size:12px;color:#777;display:block;margin-bottom:6px">Productos agregados</label>
+          <div class="lista-venta" id="lista-venta">
+            <div class="vacio">Ningún producto agregado aún</div>
+          </div>
+        </div>
+
+        <div class="totales" id="totales" style="display:none">
+          <div class="fila"><span>Subtotal</span><span id="subtotal">S/. 0.00</span></div>
+          <!-- TODO: calcular IGV correctamente -->
+          <div class="fila"><span>IGV (18%)</span><span id="igv">S/. 0.00</span></div>
+          <div class="total-final"><span>Total</span><span id="total">S/. 0.00</span></div>
+        </div>
+
+        <div class="pago-info">💵 Pago en efectivo</div>
+
+        <button class="btn-registrar" id="btn-registrar" onclick="registrar()" disabled>
+          Registrar venta
+        </button>
+        <button class="btn-limpiar" onclick="limpiar()">Cancelar / limpiar</button>
+      </div>
+
+    </div>
+
+    <!-- HISTORIAL -->
+    <div class="historial">
+      <h2>Últimas ventas</h2>
+      <!-- TODO: paginación pendiente -->
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Hora</th>
+            <th>Cliente</th>
+            <th>Items</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-historial">
+          <tr>
+            <td colspan="5" class="aviso">Aún no hay ventas registradas</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- /pagina-ventas -->
+
+  <script src="script.js"></script>
+</body>
+
+</html>
